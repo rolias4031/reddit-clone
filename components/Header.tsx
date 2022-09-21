@@ -16,12 +16,14 @@ import {
   SparklesIcon,
   SpeakerphoneIcon,
 } from '@heroicons/react/outline';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 /*
  * flex-shrink-0 means the logo will never shrink when window does.
  * tailwind responsive tip - the [size]: tags designate a breakpoint. So the 'lg:inline' tag means that at the largeg screen size the display of the home text is inline, and when its smaller its hidden!
  */
 function Header() {
+  const { data: session } = useSession();
   return (
     <div className="sticky top-0 z-50 flex bg-white px-4 py-2 shadow-sm">
       <div className="relative h-10 w-20 flex-shrink-0 cursor-pointer">
@@ -57,12 +59,31 @@ function Header() {
         <MenuIcon className="icon" />
       </div>
       {/* sign in and out buttons */}
-      <div className="hidden lg:flex items-center space-x-2 border border-gray-100 p-2 cursor-pointer">
+      {session ? (
+        <div
+        onClick={() => {
+          signOut();
+        }}
+        className="hidden lg:flex items-center space-x-2 border border-gray-100 p-2 cursor-pointer"
+      >
         <div className="relative h-5 w-5 flex-shrink-0">
           <Image layout="fill" src="/reddit-logo.png" />
         </div>
-        <p className='text-gray-400'>Sign In</p>
+        <p className="text-gray-400">Sign Out</p>
       </div>
+      ) : (
+        <div
+          onClick={() => {
+            signIn();
+          }}
+          className="hidden lg:flex items-center space-x-2 border border-gray-100 p-2 cursor-pointer"
+        >
+          <div className="relative h-5 w-5 flex-shrink-0">
+            <Image layout="fill" src="/reddit-logo.png" />
+          </div>
+          <p className="text-gray-400">Sign In</p>
+        </div>
+      )}
     </div>
   );
 }
