@@ -2,6 +2,7 @@ import NextAuth from 'next-auth';
 import RedditProvider from 'next-auth/providers/reddit'
 
 export default NextAuth({
+  secret: process.env.NEXT_AUTH_SECRET,
   providers: [
     RedditProvider({
       clientId: process.env.REDDIT_CLIENT_ID,
